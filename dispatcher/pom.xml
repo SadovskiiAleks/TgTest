@@ -35,11 +35,16 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.starter.version}</version>
         </dependency>
-
+<!--Внедрение микросервиса своего-->
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>common-rabbitmq</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
     </dependencies>
 </project>
