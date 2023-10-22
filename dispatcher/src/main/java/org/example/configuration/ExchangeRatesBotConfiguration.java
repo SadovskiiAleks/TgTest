@@ -1,4 +1,4 @@
-package org.example;
+package org.example.configuration;
 
 import org.example.controller.TelegramBot;
 import org.springframework.context.annotation.Bean;

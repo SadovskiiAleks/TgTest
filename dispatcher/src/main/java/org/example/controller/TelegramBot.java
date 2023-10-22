@@ -1,32 +1,46 @@
 package org.example.controller;
 
-import lombok.AllArgsConstructor;
-import org.example.config.BotConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j;
+import org.example.configuration.BotConfig;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
+@Log4j
 public class TelegramBot extends TelegramLongPollingBot {
+    private UpdateController updateController;
 
-    TelegramBot(BotConfig config){
+    TelegramBot(BotConfig config, UpdateController updateController) {
         super(config.getToken());
+        this.updateController = updateController;
+    }
+
+    @PostConstruct
+    public void init(){
+        updateController.registerBot(this);
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        var originalMassage = update.getMessage();
-        Message m = new Message();
-        m.setText("s");
-
-        update.setMessage(m);
-        System.out.println(originalMassage.getText());
+        updateController.processUpdate(update);
     }
 
     @Override
     public String getBotUsername() {
         return "NaumenTestSpring_bot";
+    }
+
+    public void sendAnswerMessage(SendMessage message) {
+        if (message != null) {
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+
+            }
+        }
     }
 }
